@@ -15,7 +15,7 @@ from datacenter.models import Commendation
 
 def find_schoolkid(full_name):
     try:
-        schoolkid = Schoolkid.objects.filter(full_name__contains=full_name).first()
+        schoolkid = Schoolkid.objects.get(full_name=full_name, year_of_study= '6', group_letter="А")
         if schoolkid is None:
             print(f"Ученика с именем '{full_name}' не найдено.")
         return schoolkid
@@ -29,15 +29,17 @@ def fix_marks(schoolkid):
 def remove_chastisements(schoolkid):
     chastisements = Chastisement.objects.filter(schoolkid=schoolkid)
     deleted_count, _ = chastisements.delete()
-
 def create_commendation(schoolkid, subject, commendation_texts):
-    lessons = Lesson.objects.filter(subject__in=subject, year_of_study=schoolkid.year_of_study, group_letter=schoolkid.group_letter).last()
-    commendation_text = random.choice(commendation_texts)
-    commendation = Commendation.objects.create(text = commendation_text, created = lessons.date, schoolkid = schoolkid, subject = lessons.subject, teacher = lessons.teacher)    
-    commendation.save()
+    lesson = Lesson.objects.filter(subject__in=subject, year_of_study=schoolkid.year_of_study, group_letter=schoolkid.group_letter).last()
+    if lesson:
+        commendation_text = random.choice(commendation_texts)
+        commendation = Commendation.objects.create(text = commendation_text, created = lesson.date, schoolkid = schoolkid, subject = lesson.subject, teacher = lesson.teacher)    
+        commendation.save()
+    else:
+        print('Урок не найден.')
 
 def main():
-    full_name = "Голубев Феофан"
+    full_name = "Фролов Иван Григорьевич"
     commendation_texts = ['Великолепно!', 'Ты меня приятно удивил!', 'Талантливо!']
     schoolkid = find_schoolkid(full_name)
     if schoolkid:
