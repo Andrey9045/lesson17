@@ -27,11 +27,12 @@ def find_schoolkid(full_name):
         return None 
 
 def fix_marks(schoolkid):
-    Mark.objects.filter(schoolkid=schoolkid, points__lt = 4).update(points=5)
+    Mark.objects.filter(schoolkid=schoolkid, points__lt=4).update(points=5)
 
 def remove_chastisements(schoolkid):
     chastisements = Chastisement.objects.filter(schoolkid=schoolkid)
     deleted_count, _ = chastisements.delete()
+
 def create_commendation(schoolkid, subject, commendation_texts):
     lesson = Lesson.objects.filter(subject__in=subject, year_of_study=schoolkid.year_of_study, group_letter=schoolkid.group_letter).last()
     if lesson:
