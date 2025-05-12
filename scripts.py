@@ -19,6 +19,9 @@ def find_schoolkid(full_name):
         if schoolkid is None:
             print(f"Ученика с именем '{full_name}' не найдено.")
         return schoolkid
+    except Schoolkid.DoesNotExist:
+        print(f"Ученика с именем '{full_name}' не найдено.")
+        return None
     except Schoolkid.MultipleObjectsReturned:
         print(f"Найдено несколько учеников с именем '{full_name}'.")
         return None 
