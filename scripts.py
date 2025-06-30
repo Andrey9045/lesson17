@@ -21,8 +21,6 @@ def find_schoolkid(full_name):
             year_of_study='6',
             group_letter="А"
         )
-        if schoolkid is None:
-            print(f"Ученика с именем '{full_name}' не найдено.")
         return schoolkid
     except Schoolkid.DoesNotExist:
         print(f"Ученика с именем '{full_name}' не найдено.")
